@@ -11,26 +11,26 @@ const specializations = [
 
 // Create an HTTP server
 const server = http.createServer((req, res) => {
-    console.log(`Request URL: ${req.url}`); // Log the full URL
-    const parsedUrl = url.parse(req.url, true); // Parse URL and query string
-    const pathname = parsedUrl.pathname; // Extract the pathname
-    console.log(`Pathname: ${pathname}`); // Log the pathname
-    const normalizedPathname = pathname.replace(/\/$/, ""); // Normalize path
+    const parsedUrl = url.parse(req.url, true);
+    const pathname = parsedUrl.pathname.replace(/\/$/, ''); // Remove trailing slash
     const method = req.method;
 
-    console.log(`Pathname: ${normalizedPathname}`); // Log the normalized pathname
+    // Log the full request URL and HTTP method
+    console.log(`Request URL: ${req.url}`);
+    console.log(`Pathname: ${pathname}`);
+    console.log(`Method: ${method}`);
 
     // Set response headers
     res.setHeader('Content-Type', 'application/json');
 
     // Handle GET /api/specializations
-    if (normalizedPathname === '/api/specializations' && method === 'GET') {
+    if (pathname === '/api/specializations' && method === 'GET') {
         res.statusCode = 200;
         res.end(JSON.stringify(specializations));
     }
     // Handle GET /api/specializations/:id
-    else if (normalizedPathname.startsWith('/api/specializations/') && method === 'GET') {
-        const id = parseInt(normalizedPathname.split('/')[3]); // Extract ID from URL
+    else if (pathname.startsWith('/api/specializations/') && method === 'GET') {
+        const id = parseInt(pathname.split('/')[3]);
 
         const specialization = specializations.find(s => s.id === id);
 
