@@ -13,19 +13,22 @@ const specializations = [
 const server = http.createServer((req, res) => {
     const parsedUrl = url.parse(req.url, true); // Parse URL and query string
     const pathname = parsedUrl.pathname; // Extract the pathname
+    const normalizedPathname = pathname.replace(/\/$/, ""); // Normalize path
     const method = req.method;
+
+    console.log(`Pathname: ${normalizedPathname}`); // Log the normalized pathname
 
     // Set response headers
     res.setHeader('Content-Type', 'application/json');
 
     // Handle GET /api/specializations
-    if (pathname === '/api/specializations' && method === 'GET') {
+    if (normalizedPathname === '/api/specializations' && method === 'GET') {
         res.statusCode = 200;
         res.end(JSON.stringify(specializations));
     }
     // Handle GET /api/specializations/:id
-    else if (pathname.startsWith('/api/specializations/') && method === 'GET') {
-        const id = parseInt(pathname.split('/')[3]); // Extract ID from URL
+    else if (normalizedPathname.startsWith('/api/specializations/') && method === 'GET') {
+        const id = parseInt(normalizedPathname.split('/')[3]); // Extract ID from URL
 
         const specialization = specializations.find(s => s.id === id);
 
