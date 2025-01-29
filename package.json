@@ -2,9 +2,9 @@
   "name": "clinic-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "Specialities.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node Specialities.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
