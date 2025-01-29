@@ -55,7 +55,7 @@ const server = http.createServer((req, res) => {
     // Handle GET /api/doctors/:id/available-dates
     else if (pathname.startsWith('/api/doctors/') && pathname.endsWith('/available-dates') && method === 'GET') {
         console.log("Pathname: ",pathname)
-        const doctorId = parseInt(pathname.split('/')[2]);
+        const doctorId = parseInt(pathname.split('/')[3]);
         const doctor = doctors.find(d => d.id === doctorId);
 
         if (doctor) {
