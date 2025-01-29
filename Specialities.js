@@ -44,7 +44,7 @@ const server = http.createServer((req, res) => {
     }
     // Handle GET /api/doctors/specialization/:id
  else if (pathname.startsWith('/api/doctors/specialization/') && method === 'GET') {
-    const id = parseInt(pathname.split('/')[3]);
+    const id = parseInt(pathname.split('/')[6]);
     const filteredDoctors = doctors.filter(doctor => doctor.specializationId === id);
 
     res.statusCode = 200;
