@@ -1,4 +1,5 @@
 const http = require('http');
+const url = require('url');
 
 // Sample data for clinic specializations
 const specializations = [
@@ -10,20 +11,22 @@ const specializations = [
 
 // Create an HTTP server
 const server = http.createServer((req, res) => {
-    const url = req.url;
+    const parsedUrl = url.parse(req.url, true); // Parse URL and query string
+    const pathname = parsedUrl.pathname; // Extract the pathname
     const method = req.method;
 
     // Set response headers
     res.setHeader('Content-Type', 'application/json');
 
     // Handle GET /api/specializations
-    if (url === '/api/specializations' && method === 'GET') {
+    if (pathname === '/api/specializations' && method === 'GET') {
         res.statusCode = 200;
         res.end(JSON.stringify(specializations));
     }
     // Handle GET /api/specializations/:id
-    else if (url.startsWith('/api/specializations/') && method === 'GET') {
-        const id = parseInt(url.split('/')[3]); // Extract ID from URL
+    else if (pathname.startsWith('/api/specializations/') && method === 'GET') {
+        const id = parseInt(pathname.split('/')[3]); // Extract ID from URL
+
         const specialization = specializations.find(s => s.id === id);
 
         if (specialization) {
