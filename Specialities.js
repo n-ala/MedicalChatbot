@@ -43,13 +43,14 @@ const server = http.createServer((req, res) => {
         res.end(JSON.stringify(doctors));
     }
     // Handle GET /api/doctors/specialization/:id
-    else if (pathname.startsWith('/api/doctors/specialization/') && method === 'GET') {
-        const id = parseInt(pathname.split('/')[3]);
-        const filteredDoctors = doctors.filter(doctor => doctor.specializationId === id);
+ else if (pathname.startsWith('/api/doctors/specialization/') && method === 'GET') {
+    const id = parseInt(pathname.split('/')[3]);
+    const filteredDoctors = doctors.filter(doctor => doctor.specializationId === id);
 
-        res.statusCode = 200;
-        res.end(JSON.stringify(filteredDoctors));
-    }
+    res.statusCode = 200;
+    res.end(JSON.stringify(filteredDoctors));
+}
+
     // Handle GET /api/doctors/:id/available-dates
     else if (pathname.startsWith('/api/doctors/') && pathname.endsWith('/available-dates') && method === 'GET') {
         const doctorId = parseInt(pathname.split('/')[2]);
