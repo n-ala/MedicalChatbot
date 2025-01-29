@@ -82,42 +82,87 @@ const server = http.createServer((req, res) => {
         }
     }
     // Handle POST /api/appointments to book an appointment
-    else if (pathname === '/api/appointments' && method === 'POST') {
-        let body = '';
+else if (pathname === '/api/appointments' && method === 'POST') {
+    let body = '';
 
-        // Collect the request body
-        req.on('data', chunk => {
-            body += chunk;
-        });
+    req.on('data', chunk => {
+        body += chunk.toString();
+    });
 
-        req.on('end', () => {
-            const appointmentData = JSON.parse(body);
+    req.on('end', () => {
+        const { patientId, doctorId, date, time } = JSON.parse(body);
 
-            // Check if the appointment data is valid
-            const { doctorId, date, time, patientName } = appointmentData;
+        if (!patientId || !doctorId || !date || !time) {
+            res.statusCode = 400;
+            return res.end(JSON.stringify({ error: "Missing required fields" }));
+        }
 
-            const doctorExists = doctors.some(doctor => doctor.id === doctorId);
-            const validDate = timeSlots.some(ts => ts.doctorId === doctorId && ts.date === date && ts.slots.includes(time));
+        const newAppointment = {
+            id: appointments.length + 1,
+            patientId,
+            doctorId,
+            date,
+            time
+        };
 
-            if (!doctorExists) {
-                res.statusCode = 400;
-                return res.end(JSON.stringify({ error: "Doctor not found" }));
-            }
+        appointments.push(newAppointment);
 
-            if (!validDate) {
-                res.statusCode = 400;
-                return res.end(JSON.stringify({ error: "Invalid date or time slot" }));
-            }
+        res.statusCode = 200;
+        res.end(JSON.stringify({ message: "Appointment booked successfully", appointmentId: newAppointment.id }));
+    });
+}
 
-            // Create the appointment
-            const appointmentId = appointments.length + 1;
-            const newAppointment = { id: appointmentId, doctorId, date, time, patientName };
-            appointments.push(newAppointment);
+    else if (pathname.startsWith('/api/appointments/patient/') && method === 'GET') {
+    const patientId = parseInt(pathname.split('/')[4]);
 
-            res.statusCode = 201;
-            res.end(JSON.stringify(newAppointment));
-        });
+    const patientAppointments = appointments.filter(app => app.patientId === patientId);
+
+    res.statusCode = 200;
+    res.end(JSON.stringify(patientAppointments));
+}
+
+
+
+else if (pathname.startsWith('/api/appointments/') && method === 'DELETE') {
+    const id = parseInt(pathname.split('/')[3]);
+    const index = appointments.findIndex(app => app.id === id);
+
+    if (index !== -1) {
+        appointments.splice(index, 1);
+        res.statusCode = 200;
+        res.end(JSON.stringify({ message: "Appointment cancelled successfully" }));
+    } else {
+        res.statusCode = 404;
+        res.end(JSON.stringify({ error: "Appointment not found" }));
     }
+}
+
+    else if (pathname.startsWith('/api/appointments/') && method === 'PUT') {
+    const id = parseInt(pathname.split('/')[3]);
+    let body = '';
+
+    req.on('data', chunk => {
+        body += chunk.toString();
+    });
+
+    req.on('end', () => {
+        const { patientId, date, time } = JSON.parse(body);
+        const appointment = appointments.find(app => app.id === id && app.patientId === patientId);
+
+        if (appointment) {
+            appointment.date = date;
+            appointment.time = time;
+            res.statusCode = 200;
+            res.end(JSON.stringify({ message: "Appointment rescheduled successfully" }));
+        } else {
+            res.statusCode = 404;
+            res.end(JSON.stringify({ error: "Appointment not found or unauthorized" }));
+        }
+    });
+}
+
+
+
     // Handle unknown routes
     else {
         res.statusCode = 404;
