@@ -69,7 +69,7 @@ const server = http.createServer((req, res) => {
     // Handle GET /api/doctors/:id/available-times/:date
     else if (pathname.startsWith('/api/doctors/') && pathname.includes('/available-times/') && method === 'GET') {
         console.log("Pathname: ",pathname)
-        const doctorId = parseInt(pathname.split('/')[2]);
+        const doctorId = parseInt(pathname.split('/')[3]);
         const date = pathname.split('/')[4];
         const availableSlots = timeSlots.find(ts => ts.doctorId === doctorId && ts.date === date);
 
