@@ -11,8 +11,10 @@ const specializations = [
 
 // Create an HTTP server
 const server = http.createServer((req, res) => {
+    console.log(`Request URL: ${req.url}`); // Log the full URL
     const parsedUrl = url.parse(req.url, true); // Parse URL and query string
     const pathname = parsedUrl.pathname; // Extract the pathname
+    console.log(`Pathname: ${pathname}`); // Log the pathname
     const normalizedPathname = pathname.replace(/\/$/, ""); // Normalize path
     const method = req.method;
 
