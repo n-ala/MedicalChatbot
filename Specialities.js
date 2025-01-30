@@ -116,7 +116,7 @@ else if (pathname === '/api/appointments' && method === 'POST') {
     const patientId = parseInt(pathname.split('/')[4]);
     console.log("Pathname: ",pathname)
     console.log("Appointments: ", JSON.stringify(appointments))
-    const patientAppointments = appointments.filter(app => app.patientId === patientId);
+    const patientAppointments = appointments.filter(app => parseInt(app.patientId) === parseInt(patientId));
     console.log("Patient Appointments: ",JSON.stringify(patientAppointments))
     res.statusCode = 200;
     res.end(JSON.stringify(patientAppointments));
