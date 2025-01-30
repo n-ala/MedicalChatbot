@@ -10,15 +10,15 @@ const specializations = [
 ];
 
 const doctors = [
-    { id: 1, name: "Dr. Smith", specializationId: 1, availableDates: ['2025-02-10', '2025-02-11'] },
-    { id: 2, name: "Dr. Jones", specializationId: 2, availableDates: ['2025-02-12', '2025-02-13'] }
+    { id: 1, name: "Dr. Smith", specializationId: 1, availableDates: [{date:'2025-02-10'}, {date:'2025-02-11'}] },
+    { id: 2, name: "Dr. Jones", specializationId: 2, availableDates: [{date:'2025-02-12'}, {date:'2025-02-13'}] }
 ];
 
 const timeSlots = [
-    { doctorId: 1, date: '2025-02-10', slots: ['9:00 AM', '10:00 AM', '11:00 AM'] },
-    { doctorId: 1, date: '2025-02-11', slots: ['2:00 PM', '3:00 PM', '4:00 PM'] },
-    { doctorId: 2, date: '2025-02-12', slots: ['10:00 AM', '11:00 AM'] },
-    { doctorId: 2, date: '2025-02-13', slots: ['1:00 PM', '2:00 PM'] }
+    { doctorId: 1, date: '2025-02-10', slots: [{slot:'9:00 AM'}, {slot:'10:00 AM'}, {slot:'11:00 AM'}] },
+    { doctorId: 1, date: '2025-02-11', slots: [{slot:'2:00 PM'}, {slot:'3:00 PM'}, {slot:'4:00 PM'}] },
+    { doctorId: 2, date: '2025-02-12', slots: [{slot:'10:00 AM'}, {slot:'11:00 AM'}] },
+    { doctorId: 2, date: '2025-02-13', slots: [{slot:'1:00 PM'}, {slot:'2:00 PM'}] }
 ];
 
 const appointments = [];
