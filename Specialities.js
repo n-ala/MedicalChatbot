@@ -116,7 +116,6 @@ else if (pathname === '/api/appointments' && method === 'POST') {
     const patientId = parseInt(pathname.split('/')[4]);
     console.log("Pathname: ",pathname)
     console.log("Appointments: ", JSON.stringify(appointments))
-    console.log("Patient Appointments: ",JSON.stringify(patientAppointments))
     const patientAppointments = appointments
         .filter(app => parseInt(app.patientId) === parseInt(patientId))
         .map(app => {
