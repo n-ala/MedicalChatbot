@@ -90,7 +90,7 @@ else if (pathname === '/api/appointments' && method === 'POST') {
     });
 
     req.on('end', () => {
-        const { patientId, doctorId, date, time } = JSON.parse(body);
+        const { patientId, specializationId, doctorId, date, time } = JSON.parse(body);
 
         if (!patientId || !doctorId || !date || !time) {
             res.statusCode = 400;
@@ -116,8 +116,25 @@ else if (pathname === '/api/appointments' && method === 'POST') {
     const patientId = parseInt(pathname.split('/')[4]);
     console.log("Pathname: ",pathname)
     console.log("Appointments: ", JSON.stringify(appointments))
-    const patientAppointments = appointments.filter(app => parseInt(app.patientId) === parseInt(patientId));
     console.log("Patient Appointments: ",JSON.stringify(patientAppointments))
+    const patientAppointments = appointments
+        .filter(app => parseInt(app.patientId) === parseInt(patientId))
+        .map(app => {
+            // Retrieve doctor name
+            const doctor = doctors.find(doc => doc.id === app.doctorId);
+            const doctorName = doctor ? doctor.name : "Unknown Doctor";
+
+            // Retrieve specialization name
+            const specialization = specializations.find(spec => spec.id === doctor?.specializationId);
+            const specializationName = specialization ? specialization.name : "Unknown Specialization";
+
+            // Return modified appointment with names instead of IDs
+            return {
+                ...app,
+                doctorName,
+                specializationName
+            };
+        });
     res.statusCode = 200;
     res.end(JSON.stringify(patientAppointments));
 }
