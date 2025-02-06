@@ -148,8 +148,13 @@ else if (pathname.startsWith('/api/appointments/cancel') && method === 'POST') {
     });
 
     req.on('end', () => {
-        const { id } = JSON.parse(body);
-        const index = appointments.findIndex(app => parseInt(app.id) === parseInt(id));
+        const { id, patientId } = JSON.parse(body);
+
+        // Find appointment by ID and patient ID
+        const index = appointments.findIndex(app => 
+            parseInt(app.id) === parseInt(id) && 
+            parseInt(app.patientId) === parseInt(patientId)
+        );
 
         if (index !== -1) {
             appointments.splice(index, 1);
@@ -157,10 +162,11 @@ else if (pathname.startsWith('/api/appointments/cancel') && method === 'POST') {
             res.end(JSON.stringify({ message: "Appointment cancelled successfully" }));
         } else {
             res.statusCode = 404;
-            res.end(JSON.stringify({ error: "Appointment not found" }));
+            res.end(JSON.stringify({ error: "Appointment not found or unauthorized" }));
         }
     });
 }
+
 
 else if (pathname.startsWith('/api/appointments/reschedule') && method === 'POST') {
     let body = '';
