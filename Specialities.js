@@ -124,22 +124,7 @@ else if (pathname === '/api/appointments' && method === 'POST') {
 
 
 
-else if (pathname.startsWith('/api/appointments/') && method === 'DELETE') {
-    const id = parseInt(pathname.split('/')[3]);
-    const index = appointments.findIndex(app => app.id === id);
-
-    if (index !== -1) {
-        appointments.splice(index, 1);
-        res.statusCode = 200;
-        res.end(JSON.stringify({ message: "Appointment cancelled successfully" }));
-    } else {
-        res.statusCode = 404;
-        res.end(JSON.stringify({ error: "Appointment not found" }));
-    }
-}
-
-    else if (pathname.startsWith('/api/appointments/') && method === 'PUT') {
-    const id = parseInt(pathname.split('/')[3]);
+else if (pathname.startsWith('/api/appointments/cancel') && method === 'POST') {
     let body = '';
 
     req.on('data', chunk => {
@@ -147,7 +132,29 @@ else if (pathname.startsWith('/api/appointments/') && method === 'DELETE') {
     });
 
     req.on('end', () => {
-        const { patientId, date, time } = JSON.parse(body);
+        const { id } = JSON.parse(body);
+        const index = appointments.findIndex(app => app.id === id);
+
+        if (index !== -1) {
+            appointments.splice(index, 1);
+            res.statusCode = 200;
+            res.end(JSON.stringify({ message: "Appointment cancelled successfully" }));
+        } else {
+            res.statusCode = 404;
+            res.end(JSON.stringify({ error: "Appointment not found" }));
+        }
+    });
+}
+
+else if (pathname.startsWith('/api/appointments/reschedule') && method === 'POST') {
+    let body = '';
+
+    req.on('data', chunk => {
+        body += chunk.toString();
+    });
+
+    req.on('end', () => {
+        const { id, patientId, date, time } = JSON.parse(body);
         const appointment = appointments.find(app => app.id === id && app.patientId === patientId);
 
         if (appointment) {
@@ -161,6 +168,7 @@ else if (pathname.startsWith('/api/appointments/') && method === 'DELETE') {
         }
     });
 }
+
 
 
 
