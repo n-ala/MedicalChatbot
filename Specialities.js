@@ -133,7 +133,7 @@ else if (pathname.startsWith('/api/appointments/cancel') && method === 'POST') {
 
     req.on('end', () => {
         const { id } = JSON.parse(body);
-        const index = appointments.findIndex(app => app.id === id);
+        const index = appointments.findIndex(app => parseInt(app.id) === parseInt(id));
 
         if (index !== -1) {
             appointments.splice(index, 1);
@@ -155,7 +155,7 @@ else if (pathname.startsWith('/api/appointments/reschedule') && method === 'POST
 
     req.on('end', () => {
         const { id, patientId, date, time } = JSON.parse(body);
-        const appointment = appointments.find(app => app.id === id && app.patientId === patientId);
+        const appointment = appointments.find(app => parseInt(app.id) === parseInt(id) && parseInt(app.patientId) === parseInt(patientId));
 
         if (appointment) {
             appointment.date = date;
