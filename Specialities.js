@@ -120,11 +120,11 @@ else if (pathname === '/api/appointments' && method === 'POST') {
         .filter(app => parseInt(app.patientId) === parseInt(patientId))
         .map(app => {
             // Retrieve doctor name
-            const doctor = doctors.find(doc => doc.id === app.doctorId);
+            const doctor = doctors.find(doc => parseInt(doc.id) === parseInt(app.doctorId));
             const doctorName = doctor ? doctor.name : "Unknown Doctor";
 
             // Retrieve specialization name
-            const specialization = specializations.find(spec => spec.id === doctor?.specializationId);
+            const specialization = specializations.find(spec => parseInt(spec.id) === parseInt(doctor?.specializationId));
             const specializationName = specialization ? specialization.name : "Unknown Specialization";
 
             // Return modified appointment with names instead of IDs
